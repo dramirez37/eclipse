@@ -2,8 +2,8 @@
 # Script: Eclipse Software Bugs with Walk-Forward Optimization
 # Author: David Ramirez
 # Date: July 22, 2025
-# Description: This script uses a multi-class XGBoost model with a
-#              full suite of advanced, dynamically generated features.
+# Description: This script uses the memory-efficient 'ranger' package
+#              for a Random Forest model with a full suite of features.
 # ------------------------------------------------------------------
 
 
@@ -13,21 +13,22 @@ rm(list = ls())
 gc(full = TRUE)
 set.seed(42)
 
-# All necessary packages for the final model
-packages <- c("dplyr", "readr", "data.table", "xgboost", "lubridate", "pROC", "caret", "text2vec", "tm", "igraph")
+# ** FIX: Replace randomForest with the more memory-efficient ranger package **
+packages <- c("dplyr", "readr", "data.table", "ranger", "lubridate", "pROC", "caret", "text2vec", "tm", "igraph", "Matrix")
 new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
 if(length(new_packages)) install.packages(new_packages)
 
 library(dplyr)
 library(readr)
 library(data.table)
-library(xgboost)
+library(ranger)
 library(lubridate)
 library(pROC)
 library(caret)
 library(text2vec)
 library(tm)
 library(igraph)
+library(Matrix)
 
 
 # 2. ROBUST DATA LOADING
@@ -125,7 +126,6 @@ final_data <- master_data %>%
 final_data$final_resolution <- as.factor(final_data$final_resolution)
 class_levels <- levels(final_data$final_resolution)
 num_classes <- length(class_levels)
-final_data$target_numeric <- as.integer(final_data$final_resolution) - 1
 
 
 # 5. WALK-FORWARD VALIDATION
@@ -136,7 +136,7 @@ if (total_obs < (n_folds + 1) * 2) stop("Not enough data to create even one fold
 fold_size <- floor(total_obs / (n_folds + 1))
 
 auc_scores <- c()
-cat("Starting walk-forward validation with Multi-Class objective...\n")
+cat("Starting walk-forward validation with Random Forest (ranger)...\n")
 
 for (i in 1:n_folds) {
   train_end_idx <- i * fold_size
@@ -148,10 +148,10 @@ for (i in 1:n_folds) {
 
   cat(sprintf("\n--- Fold %d: Training on %d samples, validating on %d samples ---\n", i, nrow(train_fold), nrow(validation_fold)))
   
+  # Dynamic Feature Engineering for the Fold
   train_fold <- train_fold %>% mutate(reporter = as.character(reporter), assigned_to_initial = as.character(assigned_to_initial))
   validation_fold <- validation_fold %>% mutate(reporter = as.character(reporter), assigned_to_initial = as.character(assigned_to_initial))
   
-  # Social Network with PageRank
   edges <- train_fold %>% select(reporter, assigned_to_initial) %>% filter(!is.na(reporter) & !is.na(assigned_to_initial))
   g <- graph_from_data_frame(edges, directed = FALSE)
   pagerank_scores <- page_rank(g)$vector
@@ -161,24 +161,19 @@ for (i in 1:n_folds) {
   train_fold <- train_fold %>% mutate(reporter_pagerank = ifelse(is.na(reporter_pagerank), 0, reporter_pagerank), assignee_pagerank = ifelse(is.na(assignee_pagerank), 0, assignee_pagerank))
   validation_fold <- validation_fold %>% mutate(reporter_pagerank = ifelse(is.na(reporter_pagerank), 0, reporter_pagerank), assignee_pagerank = ifelse(is.na(assignee_pagerank), 0, assignee_pagerank))
   
-  # Binning & Reputation
   top_reporters <- train_fold %>% count(reporter, sort = TRUE) %>% top_n(100) %>% pull(reporter)
   top_assignees <- train_fold %>% count(assigned_to_initial, sort = TRUE) %>% top_n(100) %>% pull(assigned_to_initial)
   train_fold <- train_fold %>% mutate(reporter_binned = ifelse(reporter %in% top_reporters, reporter, "OTHER"), assignee_binned = ifelse(assigned_to_initial %in% top_assignees, assigned_to_initial, "OTHER"))
   validation_fold <- validation_fold %>% mutate(reporter_binned = ifelse(reporter %in% top_reporters, reporter, "OTHER"), assignee_binned = ifelse(assigned_to_initial %in% top_assignees, assigned_to_initial, "OTHER"))
   global_rate <- sum(train_fold$final_resolution == "fixed") / nrow(train_fold)
-  
-  # ** FIX: Use .data pronoun in group_by to resolve scoping issue **
-  reporter_rates <- train_fold %>% group_by(.data$reporter_binned) %>% summarise(reporter_success_rate = sum(final_resolution == "fixed") / n(), .groups = "drop")
-  assignee_rates <- train_fold %>% group_by(.data$assignee_binned) %>% summarise(assignee_success_rate = sum(final_resolution == "fixed") / n(), .groups = "drop")
-  assignee_comp_rates <- train_fold %>% group_by(.data$assignee_component) %>% summarise(assignee_comp_success_rate = sum(final_resolution == "fixed") / n(), .groups="drop")
-  
+  reporter_rates <- train_fold %>% group_by(reporter_binned) %>% summarise(reporter_success_rate = sum(final_resolution == "fixed") / n(), .groups = "drop")
+  assignee_rates <- train_fold %>% group_by(assignee_binned) %>% summarise(assignee_success_rate = sum(final_resolution == "fixed") / n(), .groups = "drop")
+  assignee_comp_rates <- train_fold %>% group_by(assignee_component) %>% summarise(assignee_comp_success_rate = sum(final_resolution == "fixed") / n(), .groups="drop")
   train_fold <- train_fold %>% left_join(reporter_rates, by="reporter_binned") %>% left_join(assignee_rates, by="assignee_binned") %>% left_join(assignee_comp_rates, by="assignee_component")
   validation_fold <- validation_fold %>% left_join(reporter_rates, by="reporter_binned") %>% left_join(assignee_rates, by="assignee_binned") %>% left_join(assignee_comp_rates, by="assignee_component")
   train_fold <- train_fold %>% mutate(reporter_success_rate = ifelse(is.na(reporter_success_rate), global_rate, reporter_success_rate), assignee_success_rate = ifelse(is.na(assignee_success_rate), global_rate, assignee_success_rate), assignee_comp_success_rate = ifelse(is.na(assignee_comp_success_rate), global_rate, assignee_comp_success_rate), reputation_interaction = reporter_success_rate * assignee_success_rate)
   validation_fold <- validation_fold %>% mutate(reporter_success_rate = ifelse(is.na(reporter_success_rate), global_rate, reporter_success_rate), assignee_success_rate = ifelse(is.na(assignee_success_rate), global_rate, assignee_success_rate), assignee_comp_success_rate = ifelse(is.na(assignee_comp_success_rate), global_rate, assignee_comp_success_rate), reputation_interaction = reporter_success_rate * assignee_success_rate)
 
-  # NLP with TF-IDF
   it_train <- itoken(train_fold$short_desc, preprocessor = tolower, tokenizer = word_tokenizer, progressbar = FALSE)
   it_validate <- itoken(validation_fold$short_desc, preprocessor = tolower, tokenizer = word_tokenizer, progressbar = FALSE)
   vocab <- create_vocabulary(it_train, stopwords = stopwords("en")) %>% prune_vocabulary(term_count_min = 10, doc_proportion_max = 0.5)
@@ -187,11 +182,9 @@ for (i in 1:n_folds) {
   dtm_train <- create_dtm(it_train, vectorizer) %>% fit_transform(tfidf)
   dtm_validate <- create_dtm(it_validate, vectorizer) %>% transform(tfidf)
   
-  # Prepare structured data
-  feature_cols_structured <- setdiff(names(train_fold), c("opening", "opening_date", "final_resolution", "target_numeric", "short_desc", "reporter", "assigned_to_initial"))
+  feature_cols_structured <- setdiff(names(train_fold), c("opening", "opening_date", "final_resolution", "short_desc", "reporter", "assigned_to_initial"))
   train_structured <- as.data.table(train_fold)[, ..feature_cols_structured]
   validation_structured <- as.data.table(validation_fold)[, ..feature_cols_structured]
-  
   for(col in names(train_structured)) {
     if(is.character(train_structured[[col]]) || is.factor(train_structured[[col]]) || is.logical(train_structured[[col]])) {
       all_levels <- unique(c(train_structured[[col]], validation_structured[[col]]))
@@ -200,17 +193,27 @@ for (i in 1:n_folds) {
     }
   }
 
-  train_combined_matrix <- cbind(as.matrix(train_structured), dtm_train)
-  validation_combined_matrix <- cbind(as.matrix(validation_structured), dtm_validate)
+  train_combined <- cbind(as.data.frame(as.matrix(train_structured)), as.data.frame(as.matrix(dtm_train)))
+  validation_combined <- cbind(as.data.frame(as.matrix(validation_structured)), as.data.frame(as.matrix(dtm_validate)))
+  
+  # Impute NAs
+  train_combined[is.na(train_combined)] <- 0
+  validation_combined[is.na(validation_combined)] <- 0
+  
+  # Add target variable to training data for ranger formula
+  train_combined$final_resolution <- train_fold$final_resolution
 
-  dtrain <- xgb.DMatrix(data = train_combined_matrix, label = train_fold$target_numeric)
-  dvalidation <- xgb.DMatrix(data = validation_combined_matrix, label = validation_fold$target_numeric)
-
-  params <- list(objective = "multi:softprob", eval_metric = "mlogloss", num_class = num_classes, eta = 0.05, max_depth = 6)
-  xgb_model <- xgb.train(params = params, data = dtrain, nrounds = 500, watchlist = list(eval = dvalidation), early_stopping_rounds = 30, verbose = 0)
-
-  pred_probs <- predict(xgb_model, dvalidation, reshape = TRUE)
-  colnames(pred_probs) <- class_levels
+  # Train and Predict with ranger
+  ranger_model <- ranger(
+    dependent.variable.name = "final_resolution",
+    data = train_combined,
+    num.trees = 250,
+    probability = TRUE,
+    importance = 'impurity'
+  )
+  
+  pred_obj <- predict(ranger_model, data = validation_combined)
+  pred_probs <- pred_obj$predictions
   
   roc_obj <- multiclass.roc(validation_fold$final_resolution, pred_probs, quiet=TRUE)
   auc_val <- as.numeric(pROC::auc(roc_obj, levels = c("fixed"), quiet = TRUE))
@@ -233,25 +236,21 @@ if (length(auc_scores) > 0) {
 
   cat("--- Training final model on all data... ---\n")
   
+  # Final feature engineering for the full dataset...
   final_data_full <- final_data %>% mutate(reporter = as.character(reporter), assigned_to_initial = as.character(assigned_to_initial))
-  
   edges_final <- final_data_full %>% select(reporter, assigned_to_initial) %>% filter(!is.na(reporter) & !is.na(assigned_to_initial))
   g_final <- graph_from_data_frame(edges_final, directed = FALSE)
   pagerank_final <- page_rank(g_final)$vector
   pagerank_df_final <- data.frame(person = names(pagerank_final), pagerank = pagerank_final)
   final_data_full <- final_data_full %>% left_join(pagerank_df_final, by = c("reporter" = "person")) %>% rename(reporter_pagerank = pagerank) %>% left_join(pagerank_df_final, by = c("assigned_to_initial" = "person")) %>% rename(assignee_pagerank = pagerank)
   final_data_full <- final_data_full %>% mutate(reporter_pagerank = ifelse(is.na(reporter_pagerank), 0, reporter_pagerank), assignee_pagerank = ifelse(is.na(assignee_pagerank), 0, assignee_pagerank))
-  
   top_reporters_final <- final_data_full %>% count(reporter, sort = TRUE) %>% top_n(100) %>% pull(reporter)
   top_assignees_final <- final_data_full %>% count(assigned_to_initial, sort = TRUE) %>% top_n(100) %>% pull(assigned_to_initial)
   final_data_full <- final_data_full %>% mutate(reporter_binned = ifelse(reporter %in% top_reporters_final, reporter, "OTHER"), assignee_binned = ifelse(assigned_to_initial %in% top_assignees_final, assigned_to_initial, "OTHER"))
-  
   global_rate_final <- sum(final_data_full$final_resolution == "fixed") / nrow(final_data_full)
-  
-  reporter_rates_final <- final_data_full %>% group_by(.data$reporter_binned) %>% summarise(reporter_success_rate = sum(final_resolution == "fixed") / n(), .groups = "drop")
-  assignee_rates_final <- final_data_full %>% group_by(.data$assignee_binned) %>% summarise(assignee_success_rate = sum(final_resolution == "fixed") / n(), .groups = "drop")
-  assignee_comp_rates_final <- final_data_full %>% group_by(.data$assignee_component) %>% summarise(assignee_comp_success_rate = sum(final_resolution == "fixed") / n(), .groups="drop")
-  
+  reporter_rates_final <- final_data_full %>% group_by(reporter_binned) %>% summarise(reporter_success_rate = sum(final_resolution == "fixed") / n(), .groups = "drop")
+  assignee_rates_final <- final_data_full %>% group_by(assignee_binned) %>% summarise(assignee_success_rate = sum(final_resolution == "fixed") / n(), .groups = "drop")
+  assignee_comp_rates_final <- final_data_full %>% group_by(assignee_component) %>% summarise(assignee_comp_success_rate = sum(final_resolution == "fixed") / n(), .groups="drop")
   final_data_full <- final_data_full %>%
     left_join(reporter_rates_final, by = "reporter_binned") %>%
     left_join(assignee_rates_final, by = "assignee_binned") %>%
@@ -266,26 +265,30 @@ if (length(auc_scores) > 0) {
   vectorizer_final <- vocab_vectorizer(vocab_final)
   tfidf_final <- TfIdf$new()
   dtm_final <- create_dtm(it_final, vectorizer_final) %>% fit_transform(tfidf_final)
-  
   feature_cols_structured_final <- setdiff(names(final_data_full), c("opening", "opening_date", "final_resolution", "target_numeric", "short_desc"))
   final_structured_data <- as.data.table(final_data_full)[, ..feature_cols_structured_final]
   for(col in names(final_structured_data)) { if(is.character(final_structured_data[[col]]) || is.factor(final_structured_data[[col]]) || is.logical(final_structured_data[[col]])) { set(final_structured_data, j = col, value = as.integer(as.factor(final_structured_data[[col]]))) } }
+  final_combined_data <- cbind(as.data.frame(as.matrix(final_structured_data)), as.data.frame(as.matrix(dtm_final)))
+  final_combined_data[is.na(final_combined_data)] <- 0
+  final_combined_data$final_resolution <- final_data_full$final_resolution
   
-  final_combined_matrix <- cbind(as.matrix(final_structured_data), dtm_final)
-  dfinal <- xgb.DMatrix(data = final_combined_matrix, label = final_data_full$target_numeric)
-  
-  final_params <- list(objective="multi:softprob", eval_metric="mlogloss", num_class=num_classes, eta = 0.05, max_depth = 6)
-  final_model <- xgb.train(params = final_params, data = dfinal, nrounds = if(!is.null(xgb_model)) xgb_model$best_iteration else 100, verbose = 0)
+  final_rf_model <- ranger(
+    dependent.variable.name = "final_resolution",
+    data = final_combined_data,
+    num.trees = 500,
+    probability = FALSE, # Set to FALSE for faster final prediction
+    importance = 'impurity'
+  )
 
-  importance <- xgb.importance(model = final_model)
-  cat("\n--- Top 15 Feature Importance from Final Model ---\n")
-  print(importance[1:15,])
+  importance_df <- as.data.frame(importance(final_rf_model))
+  importance_df$Feature <- rownames(importance_df)
+  importance_df <- importance_df[order(-importance_df$importance), ]
+  cat("\n--- Top 15 Feature Importance from Final Model (Impurity) ---\n")
+  print(head(importance_df, 15))
 
   cat("\n--- Confusion Matrix for Final Model (on all data) ---\n")
-  final_preds_probs <- predict(final_model, dfinal, reshape = TRUE)
-  final_preds_numeric <- max.col(final_preds_probs) - 1
-  predicted_labels <- factor(class_levels[final_preds_numeric + 1], levels = class_levels)
-  actual_labels <- factor(final_data_full$final_resolution, levels = class_levels)
+  predicted_labels <- predict(final_rf_model, data = final_combined_data)$predictions
+  actual_labels <- final_data_full$final_resolution
   conf_matrix <- confusionMatrix(data = predicted_labels, reference = actual_labels)
   print(conf_matrix)
 

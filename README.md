@@ -19,7 +19,7 @@ To make the most accurate predictions, this solution does not rely on a single m
 
 As shown in the diagram below, bug report data is fed to two independent expert models (XGBoost and LightGBM). These models analyze the problem from different angles and each provides a recommendation. A final "judge" model then weighs the opinions of the two experts to make the final, most robust prediction.
 
-![Model Architecture](model_architecture.png)
+![Model Architecture](output/model_architecture.svg)
 
 To ensure the model performs well in a real-world scenario, a technique called **Walk-Forward Validation** was used. This means the model was trained on historical data and tested on future data, repeating the process over time to prove its effectiveness is stable and reliable.
 
@@ -29,7 +29,7 @@ To ensure the model performs well in a real-world scenario, a technique called *
 
 The model identified several key factors that strongly influence whether a bug will be fixed. The chart below shows the top 15 most important features the model uses.
 
-![Feature Importance](feature_importance.png)
+![Feature Importance](output/feature_importance.svg)
 
 These factors can be grouped into a few simple categories:
 
@@ -47,13 +47,13 @@ The model demonstrates consistently high performance and provides clear business
 
 The model's ability to distinguish between bugs that will be fixed versus those that won't is excellent, with an **average AUC score of 0.8741** (where 1.0 is a perfect score). The chart below shows that the model's performance remained strong and even improved over time across all 12 validation periods.
 
-![Fold AUC Performance](fold_auc_performance.png)
+![Fold AUC Performance](output/fold_auc_performance.svg)
 
 ### Practical Accuracy
 
 The confusion matrix shows how the model performed on the final set of test data. In this test, the model correctly identified **6,260 bugs that would be fixed**, while misclassifying only 673. This high level of accuracy provides confidence in its real-world application.
 
-![Confusion Matrix](confusion_matrix.png)
+![Confusion Matrix](output/confusion_matrix.svg)
 
 ### Business Impact (The "So What?")
 
@@ -61,7 +61,7 @@ The most important result is how this model can improve efficiency. The Cumulati
 
 By using the model to prioritize and **focus on just the top 20% of bugs, a development team can identify 31% of all bugs that will eventually get fixed**, making the process significantly more efficient than random selection.
 
-![Lift Chart](lift_chart.png)
+![Lift Chart](output/lift_chart.svg)
 
 ---
 ## 5. Conclusion

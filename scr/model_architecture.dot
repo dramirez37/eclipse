@@ -1,0 +1,56 @@
+digraph Stacking_Ensemble {
+    // Graph Attributes
+    graph [rankdir=LR, splines=ortho, nodesep=0.6, pad="1,0.5", label="Model Architecture: Stacking Ensemble", labelloc=t, fontsize=20, fontname="Helvetica"];
+    node [shape=box, style="filled,rounded", fontname="Helvetica", fontsize=12];
+    edge [fontname="Helvetica", fontsize=10, color="#555555"];
+
+    // Node Definitions
+    InputData [
+        label=<
+            <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#e3f2fd">
+                <TR><TD><B>Bug Report Data (Input)</B></TD></TR>
+                <TR><TD ALIGN="LEFT" BALIGN="LEFT">
+                    <BR/>
+                    • duration_in_VERIFIED<BR ALIGN="LEFT"/>
+                    • pagerank_diff<BR ALIGN="LEFT"/>
+                    • reporter_success_rate<BR ALIGN="LEFT"/>
+                    • reassignment_count<BR ALIGN="LEFT"/>
+                    • ... and other features<BR ALIGN="LEFT"/>
+                    <BR/>
+                </TD></TR>
+            </TABLE>
+        >
+        fillcolor="#e3f2fd"
+    ];
+
+    subgraph cluster_level1 {
+        label = "Level 1: Base Models";
+        labelloc = "b";
+        style = "filled,rounded";
+        fillcolor = "#f5f5f5";
+        node [fillcolor="#fff9c4"];
+        
+        XGB [label="Expert Model 1\n(XGBoost)"];
+        LGB [label="Expert Model 2\n(LightGBM)"];
+    }
+
+    MetaModel [
+        label="Level 2: Final Judge\n(Logistic Regression)",
+        fillcolor="#dcedc8"
+    ];
+
+    Prediction [
+        label="Final Prediction\n('Fixed' or 'Not Fixed')",
+        shape=ellipse,
+        fillcolor="#ffcdd2"
+    ];
+
+    // Edge Definitions (Connections)
+    InputData -> XGB [style=dashed];
+    InputData -> LGB [style=dashed];
+    
+    XGB -> MetaModel [label="  Prediction A"];
+    LGB -> MetaModel [label="  Prediction B"];
+    
+    MetaModel -> Prediction [label="  Final Decision", style=bold, color="#333333"];
+}

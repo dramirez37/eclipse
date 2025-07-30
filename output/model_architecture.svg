@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1110pt" height="284pt" viewBox="0.00 0.00 1109.70 284.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(72 248)">
+<title>Stacking_Ensemble</title>
+<polygon fill="white" stroke="none" points="-72,36 -72,-248 1037.7,-248 1037.7,36 -72,36"/>
+<text text-anchor="middle" x="482.85" y="-190" font-family="Helvetica,sans-Serif" font-size="20.00">Model Architecture: Stacking Ensemble</text>
+<g id="clust1" class="cluster">
+<title>cluster_level1</title>
+<path fill="#f5f5f5" stroke="black" d="M264.41,-8C264.41,-8 447.63,-8 447.63,-8 453.63,-8 459.63,-14 459.63,-20 459.63,-20 459.63,-160 459.63,-160 459.63,-166 453.63,-172 447.63,-172 447.63,-172 264.41,-172 264.41,-172 258.41,-172 252.41,-166 252.41,-160 252.41,-160 252.41,-20 252.41,-20 252.41,-14 258.41,-8 264.41,-8"/>
+<text text-anchor="middle" x="356.02" y="-18" font-family="Helvetica,sans-Serif" font-size="20.00">Level 1: Base Models</text>
+</g>
+<!-- InputData -->
+<g id="node1" class="node">
+<title>InputData</title>
+<path fill="#e3f2fd" stroke="black" d="M211.41,-179.8C211.41,-179.8 12,-179.8 12,-179.8 6,-179.8 0,-173.8 0,-167.8 0,-167.8 0,-42.2 0,-42.2 0,-36.2 6,-30.2 12,-30.2 12,-30.2 211.41,-30.2 211.41,-30.2 217.41,-30.2 223.41,-36.2 223.41,-42.2 223.41,-42.2 223.41,-167.8 223.41,-167.8 223.41,-173.8 217.41,-179.8 211.41,-179.8"/>
+<polygon fill="#e3f2fd" stroke="none" points="8,-34.2 8,-175.8 215.41,-175.8 215.41,-34.2 8,-34.2"/>
+<polygon fill="none" stroke="black" points="8,-155.4 8,-175.8 215.41,-175.8 215.41,-155.4 8,-155.4"/>
+<text text-anchor="start" x="44.05" y="-163" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="12.00">Bug Report Data (Input)</text>
+<polygon fill="none" stroke="black" points="8,-34.2 8,-155.4 215.41,-155.4 215.41,-34.2 8,-34.2"/>
+<text text-anchor="start" x="11" y="-141.6" font-family="Helvetica,sans-Serif" font-size="12.00">                    </text>
+<text text-anchor="start" x="11" y="-127.2" font-family="Helvetica,sans-Serif" font-size="12.00">                    • duration_in_VERIFIED</text>
+<text text-anchor="start" x="11" y="-112.8" font-family="Helvetica,sans-Serif" font-size="12.00">                    • pagerank_diff</text>
+<text text-anchor="start" x="11" y="-98.4" font-family="Helvetica,sans-Serif" font-size="12.00">                    • reporter_success_rate</text>
+<text text-anchor="start" x="11" y="-84" font-family="Helvetica,sans-Serif" font-size="12.00">                    • reassignment_count</text>
+<text text-anchor="start" x="11" y="-69.6" font-family="Helvetica,sans-Serif" font-size="12.00">                    • ... and other features</text>
+<text text-anchor="start" x="11" y="-55.2" font-family="Helvetica,sans-Serif" font-size="12.00">                    </text>
+<text text-anchor="start" x="11" y="-40.8" font-family="Helvetica,sans-Serif" font-size="12.00">                </text>
+</g>
+<!-- XGB -->
+<g id="node2" class="node">
+<title>XGB</title>
+<path fill="#fff9c4" stroke="black" d="M391.87,-164.4C391.87,-164.4 319.17,-164.4 319.17,-164.4 313.17,-164.4 307.17,-158.4 307.17,-152.4 307.17,-152.4 307.17,-139.6 307.17,-139.6 307.17,-133.6 313.17,-127.6 319.17,-127.6 319.17,-127.6 391.87,-127.6 391.87,-127.6 397.87,-127.6 403.87,-133.6 403.87,-139.6 403.87,-139.6 403.87,-152.4 403.87,-152.4 403.87,-158.4 397.87,-164.4 391.87,-164.4"/>
+<text text-anchor="middle" x="355.52" y="-149.6" font-family="Helvetica,sans-Serif" font-size="12.00">Expert Model 1</text>
+<text text-anchor="middle" x="355.52" y="-135.2" font-family="Helvetica,sans-Serif" font-size="12.00">(XGBoost)</text>
+</g>
+<!-- InputData&#45;&gt;XGB -->
+<g id="edge1" class="edge">
+<title>InputData-&gt;XGB</title>
+<path fill="none" stroke="#555555" stroke-dasharray="5,2" d="M223.62,-146C223.62,-146 295.18,-146 295.18,-146"/>
+<polygon fill="#555555" stroke="#555555" points="295.18,-149.5 305.18,-146 295.18,-142.5 295.18,-149.5"/>
+</g>
+<!-- LGB -->
+<g id="node3" class="node">
+<title>LGB</title>
+<path fill="#fff9c4" stroke="black" d="M391.87,-84.4C391.87,-84.4 319.17,-84.4 319.17,-84.4 313.17,-84.4 307.17,-78.4 307.17,-72.4 307.17,-72.4 307.17,-59.6 307.17,-59.6 307.17,-53.6 313.17,-47.6 319.17,-47.6 319.17,-47.6 391.87,-47.6 391.87,-47.6 397.87,-47.6 403.87,-53.6 403.87,-59.6 403.87,-59.6 403.87,-72.4 403.87,-72.4 403.87,-78.4 397.87,-84.4 391.87,-84.4"/>
+<text text-anchor="middle" x="355.52" y="-69.6" font-family="Helvetica,sans-Serif" font-size="12.00">Expert Model 2</text>
+<text text-anchor="middle" x="355.52" y="-55.2" font-family="Helvetica,sans-Serif" font-size="12.00">(LightGBM)</text>
+</g>
+<!-- InputData&#45;&gt;LGB -->
+<g id="edge2" class="edge">
+<title>InputData-&gt;LGB</title>
+<path fill="none" stroke="#555555" stroke-dasharray="5,2" d="M223.62,-66C223.62,-66 295.18,-66 295.18,-66"/>
+<polygon fill="#555555" stroke="#555555" points="295.18,-69.5 305.18,-66 295.18,-62.5 295.18,-69.5"/>
+</g>
+<!-- MetaModel -->
+<g id="node4" class="node">
+<title>MetaModel</title>
+<path fill="#dcedc8" stroke="black" d="M663.81,-126.4C663.81,-126.4 559.1,-126.4 559.1,-126.4 553.1,-126.4 547.1,-120.4 547.1,-114.4 547.1,-114.4 547.1,-101.6 547.1,-101.6 547.1,-95.6 553.1,-89.6 559.1,-89.6 559.1,-89.6 663.81,-89.6 663.81,-89.6 669.81,-89.6 675.81,-95.6 675.81,-101.6 675.81,-101.6 675.81,-114.4 675.81,-114.4 675.81,-120.4 669.81,-126.4 663.81,-126.4"/>
+<text text-anchor="middle" x="611.46" y="-111.6" font-family="Helvetica,sans-Serif" font-size="12.00">Level 2: Final Judge</text>
+<text text-anchor="middle" x="611.46" y="-97.2" font-family="Helvetica,sans-Serif" font-size="12.00">(Logistic Regression)</text>
+</g>
+<!-- XGB&#45;&gt;MetaModel -->
+<g id="edge3" class="edge">
+<title>XGB-&gt;MetaModel</title>
+<path fill="none" stroke="#555555" d="M371.64,-127.46C371.64,-120.45 371.64,-114.13 371.64,-114.13 371.64,-114.13 535.36,-114.13 535.36,-114.13"/>
+<polygon fill="#555555" stroke="#555555" points="535.36,-117.63 545.36,-114.13 535.36,-110.63 535.36,-117.63"/>
+<text text-anchor="middle" x="499.37" y="-144" font-family="Helvetica,sans-Serif" font-size="10.00">  Prediction A</text>
+</g>
+<!-- LGB&#45;&gt;MetaModel -->
+<g id="edge4" class="edge">
+<title>LGB-&gt;MetaModel</title>
+<path fill="none" stroke="#555555" d="M339.4,-84.77C339.4,-93.45 339.4,-101.87 339.4,-101.87 339.4,-101.87 535.13,-101.87 535.13,-101.87"/>
+<polygon fill="#555555" stroke="#555555" points="535.13,-105.37 545.13,-101.87 535.13,-98.37 535.13,-105.37"/>
+<text text-anchor="middle" x="499.37" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00">  Prediction B</text>
+</g>
+<!-- Prediction -->
+<g id="node5" class="node">
+<title>Prediction</title>
+<ellipse fill="#ffcdd2" stroke="black" cx="872.94" cy="-108" rx="92.76" ry="26.02"/>
+<text text-anchor="middle" x="872.94" y="-111.6" font-family="Helvetica,sans-Serif" font-size="12.00">Final Prediction</text>
+<text text-anchor="middle" x="872.94" y="-97.2" font-family="Helvetica,sans-Serif" font-size="12.00">('Fixed' or 'Not Fixed')</text>
+</g>
+<!-- MetaModel&#45;&gt;Prediction -->
+<g id="edge5" class="edge">
+<title>MetaModel-&gt;Prediction</title>
+<path fill="none" stroke="#333333" stroke-width="2" d="M676.09,-108C676.09,-108 768.42,-108 768.42,-108"/>
+<polygon fill="#333333" stroke="#333333" stroke-width="2" points="766.9,-111.5 776.9,-108 766.9,-104.5 766.9,-111.5"/>
+<text text-anchor="middle" x="727.99" y="-111" font-family="Helvetica,sans-Serif" font-size="10.00">  Final Decision</text>
+</g>
+</g>
+</svg>

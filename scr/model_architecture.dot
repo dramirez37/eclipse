@@ -1,56 +1,88 @@
-digraph Stacking_Ensemble {
-    // Graph Attributes
-    graph [rankdir=LR, splines=ortho, nodesep=0.6, pad="1,0.5", label="Model Architecture: Stacking Ensemble", labelloc=t, fontsize=20, fontname="Helvetica"];
-    node [shape=box, style="filled,rounded", fontname="Helvetica", fontsize=12];
-    edge [fontname="Helvetica", fontsize=10, color="#555555"];
+digraph Cohesive_Process {
 
-    // Node Definitions
-    InputData [
-        label=<
-            <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#e3f2fd">
-                <TR><TD><B>Bug Report Data (Input)</B></TD></TR>
-                <TR><TD ALIGN="LEFT" BALIGN="LEFT">
-                    <BR/>
-                    • duration_in_VERIFIED<BR ALIGN="LEFT"/>
-                    • pagerank_diff<BR ALIGN="LEFT"/>
-                    • reporter_success_rate<BR ALIGN="LEFT"/>
-                    • reassignment_count<BR ALIGN="LEFT"/>
-                    • ... and other features<BR ALIGN="LEFT"/>
-                    <BR/>
-                </TD></TR>
-            </TABLE>
-        >
-        fillcolor="#e3f2fd"
+    graph [
+        rankdir=TB, 
+        splines=ortho, 
+        nodesep=0.8, 
+        pad="1", 
+        label="Model Architecture & Training Workflow", 
+        labelloc=t, 
+        fontsize=22, 
+        fontname="Helvetica"
     ];
 
-    subgraph cluster_level1 {
-        label = "Level 1: Base Models";
-        labelloc = "b";
-        style = "filled,rounded";
-        fillcolor = "#f5f5f5";
-        node [fillcolor="#fff9c4"];
+    subgraph cluster_workflow {
+        label = "";
+        style="filled,rounded";
+        fillcolor="#f5f5f5";
+
+        // Core Model Architecture (Left Side)
+        subgraph cluster_model_arch {
+            label = "Core Model Architecture";
+            style = invis;
+            node [fontname="Helvetica", fontsize=12, shape=box, style="filled,rounded"];
+            edge [fontname="Helvetica", fontsize=10, color="#555555"];
+            
+            InputData [
+                fillcolor="#BBDEFB",
+                label=<
+                    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#BBDEFB">
+                        <TR><TD><B>Bug Report Features</B></TD></TR>
+                        <TR><TD ALIGN="LEFT">
+                            <BR/>
+                            • duration_in_VERIFIED<BR ALIGN="LEFT"/>
+                            • pagerank_diff<BR ALIGN="LEFT"/>
+                            • reporter_success_rate<BR ALIGN="LEFT"/>
+                            • ... and other features<BR ALIGN="LEFT"/>
+                            <BR/>
+                        </TD></TR>
+                    </TABLE>
+                >
+            ];
+            
+            StackingModel [
+                fillcolor="#C8E6C9",
+                label=<
+                    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#C8E6C9">
+                        <TR><TD><B>Stacking Ensemble Model</B></TD></TR>
+                        <TR><TD ALIGN="LEFT">
+                            <BR/>
+                            L1: XGBoost + LightGBM<BR ALIGN="LEFT"/>
+                            L2: Logistic Regression<BR ALIGN="LEFT"/>
+                            <BR/>
+                        </TD></TR>
+                    </TABLE>
+                >
+            ];
+            
+            Prediction [
+                label="Final Prediction\n('Fixed' or 'Not Fixed')",
+                fillcolor="#FFCCBC",
+                shape=ellipse
+            ];
+            
+            InputData -> StackingModel -> Prediction [style=bold, color="#37474F"];
+        }
         
-        XGB [label="Expert Model 1\n(XGBoost)"];
-        LGB [label="Expert Model 2\n(LightGBM)"];
+        // Walk-Forward Validation Process (Right Side)
+        subgraph cluster_walk_forward {
+            label = "Walk-Forward Validation Process";
+            style=dashed;
+            node [fontname="Helvetica", fontsize=12, shape=box, style="filled,rounded", fillcolor="#CFD8DC"];
+            
+            Train1 [label="Train on\nFold 1", fillcolor="#FFF9C4"];
+            Validate1 [label="Validate on\nFold 2"];
+            Train2 [label="Train on\nFolds 1-2", fillcolor="#FFF9C4"];
+            Validate2 [label="Validate on\nFold 3"];
+            Dots [label="...", shape=plaintext];
+
+            Train1 -> Validate1;
+            Validate1 -> Train2 [style=dashed];
+            Train2 -> Validate2;
+            Validate2 -> Dots [style=dashed];
+        }
+        
+        // Connections between Model Architecture and Walk-Forward Validation
+        StackingModel -> Train1 [style="dashed, bold", color="#424242", constraint=false, lhead=cluster_walk_forward];
     }
-
-    MetaModel [
-        label="Level 2: Final Judge\n(Logistic Regression)",
-        fillcolor="#dcedc8"
-    ];
-
-    Prediction [
-        label="Final Prediction\n('Fixed' or 'Not Fixed')",
-        shape=ellipse,
-        fillcolor="#ffcdd2"
-    ];
-
-    // Edge Definitions (Connections)
-    InputData -> XGB [style=dashed];
-    InputData -> LGB [style=dashed];
-    
-    XGB -> MetaModel [label="  Prediction A"];
-    LGB -> MetaModel [label="  Prediction B"];
-    
-    MetaModel -> Prediction [label="  Final Decision", style=bold, color="#333333"];
 }

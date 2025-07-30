@@ -1,90 +1,132 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1110pt" height="284pt" viewBox="0.00 0.00 1109.70 284.00">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(72 248)">
-<title>Stacking_Ensemble</title>
-<polygon fill="white" stroke="none" points="-72,36 -72,-248 1037.7,-248 1037.7,36 -72,36"/>
-<text text-anchor="middle" x="482.85" y="-190" font-family="Helvetica,sans-Serif" font-size="20.00">Model Architecture: Stacking Ensemble</text>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="791pt" height="771pt" viewBox="0.00 0.00 791.00 771.24">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(72 699.24)">
+<title>Cohesive_Process</title>
+<polygon fill="white" stroke="none" points="-72,72 -72,-699.24 719,-699.24 719,72 -72,72"/>
+<text text-anchor="middle" x="323.5" y="-603.44" font-family="Helvetica,sans-Serif" font-size="22.00">Model Architecture &amp; Training Workflow</text>
 <g id="clust1" class="cluster">
-<title>cluster_level1</title>
-<path fill="#f5f5f5" stroke="black" d="M264.41,-8C264.41,-8 447.63,-8 447.63,-8 453.63,-8 459.63,-14 459.63,-20 459.63,-20 459.63,-160 459.63,-160 459.63,-166 453.63,-172 447.63,-172 447.63,-172 264.41,-172 264.41,-172 258.41,-172 252.41,-166 252.41,-160 252.41,-160 252.41,-20 252.41,-20 252.41,-14 258.41,-8 264.41,-8"/>
-<text text-anchor="middle" x="356.02" y="-18" font-family="Helvetica,sans-Serif" font-size="20.00">Level 1: Base Models</text>
+<title>cluster_workflow</title>
+<path fill="#f5f5f5" stroke="black" d="M20,-8C20,-8 627,-8 627,-8 633,-8 639,-14 639,-20 639,-20 639,-572.84 639,-572.84 639,-578.84 633,-584.84 627,-584.84 627,-584.84 20,-584.84 20,-584.84 14,-584.84 8,-578.84 8,-572.84 8,-572.84 8,-20 8,-20 8,-14 14,-8 20,-8"/>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_model_arch</title>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_walk_forward</title>
+<polygon fill="none" stroke="black" stroke-dasharray="5,2" points="290,-16 290,-527.64 631,-527.64 631,-16 290,-16"/>
+<text text-anchor="middle" x="460.5" y="-503.84" font-family="Helvetica,sans-Serif" font-size="22.00">Walk-Forward Validation Process</text>
 </g>
 <!-- InputData -->
 <g id="node1" class="node">
 <title>InputData</title>
-<path fill="#e3f2fd" stroke="black" d="M211.41,-179.8C211.41,-179.8 12,-179.8 12,-179.8 6,-179.8 0,-173.8 0,-167.8 0,-167.8 0,-42.2 0,-42.2 0,-36.2 6,-30.2 12,-30.2 12,-30.2 211.41,-30.2 211.41,-30.2 217.41,-30.2 223.41,-36.2 223.41,-42.2 223.41,-42.2 223.41,-167.8 223.41,-167.8 223.41,-173.8 217.41,-179.8 211.41,-179.8"/>
-<polygon fill="#e3f2fd" stroke="none" points="8,-34.2 8,-175.8 215.41,-175.8 215.41,-34.2 8,-34.2"/>
-<polygon fill="none" stroke="black" points="8,-155.4 8,-175.8 215.41,-175.8 215.41,-155.4 8,-155.4"/>
-<text text-anchor="start" x="44.05" y="-163" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="12.00">Bug Report Data (Input)</text>
-<polygon fill="none" stroke="black" points="8,-34.2 8,-155.4 215.41,-155.4 215.41,-34.2 8,-34.2"/>
-<text text-anchor="start" x="11" y="-141.6" font-family="Helvetica,sans-Serif" font-size="12.00">                    </text>
-<text text-anchor="start" x="11" y="-127.2" font-family="Helvetica,sans-Serif" font-size="12.00">                    • duration_in_VERIFIED</text>
-<text text-anchor="start" x="11" y="-112.8" font-family="Helvetica,sans-Serif" font-size="12.00">                    • pagerank_diff</text>
-<text text-anchor="start" x="11" y="-98.4" font-family="Helvetica,sans-Serif" font-size="12.00">                    • reporter_success_rate</text>
-<text text-anchor="start" x="11" y="-84" font-family="Helvetica,sans-Serif" font-size="12.00">                    • reassignment_count</text>
-<text text-anchor="start" x="11" y="-69.6" font-family="Helvetica,sans-Serif" font-size="12.00">                    • ... and other features</text>
-<text text-anchor="start" x="11" y="-55.2" font-family="Helvetica,sans-Serif" font-size="12.00">                    </text>
-<text text-anchor="start" x="11" y="-40.8" font-family="Helvetica,sans-Serif" font-size="12.00">                </text>
+<path fill="#bbdefb" stroke="black" d="M262.04,-534.44C262.04,-534.44 35.96,-534.44 35.96,-534.44 29.96,-534.44 23.96,-528.44 23.96,-522.44 23.96,-522.44 23.96,-411.24 23.96,-411.24 23.96,-405.24 29.96,-399.24 35.96,-399.24 35.96,-399.24 262.04,-399.24 262.04,-399.24 268.04,-399.24 274.04,-405.24 274.04,-411.24 274.04,-411.24 274.04,-522.44 274.04,-522.44 274.04,-528.44 268.04,-534.44 262.04,-534.44"/>
+<polygon fill="#bbdefb" stroke="none" points="31.96,-403.24 31.96,-530.44 266.04,-530.44 266.04,-403.24 31.96,-403.24"/>
+<polygon fill="none" stroke="black" points="31.96,-510.04 31.96,-530.44 266.04,-530.44 266.04,-510.04 31.96,-510.04"/>
+<text text-anchor="start" x="89.66" y="-517.64" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="12.00">Bug Report Features</text>
+<polygon fill="none" stroke="black" points="31.96,-403.24 31.96,-510.04 266.04,-510.04 266.04,-403.24 31.96,-403.24"/>
+<text text-anchor="start" x="102.32" y="-496.24" font-family="Helvetica,sans-Serif" font-size="12.00">                            </text>
+<text text-anchor="start" x="34.96" y="-481.84" font-family="Helvetica,sans-Serif" font-size="12.00">                            • duration_in_VERIFIED</text>
+<text text-anchor="start" x="34.96" y="-467.44" font-family="Helvetica,sans-Serif" font-size="12.00">                            • pagerank_diff</text>
+<text text-anchor="start" x="34.96" y="-453.04" font-family="Helvetica,sans-Serif" font-size="12.00">                            • reporter_success_rate</text>
+<text text-anchor="start" x="34.96" y="-438.64" font-family="Helvetica,sans-Serif" font-size="12.00">                            • ... and other features</text>
+<text text-anchor="start" x="102.32" y="-424.24" font-family="Helvetica,sans-Serif" font-size="12.00">                            </text>
+<text text-anchor="start" x="108.99" y="-409.84" font-family="Helvetica,sans-Serif" font-size="12.00">                        </text>
 </g>
-<!-- XGB -->
+<!-- StackingModel -->
 <g id="node2" class="node">
-<title>XGB</title>
-<path fill="#fff9c4" stroke="black" d="M391.87,-164.4C391.87,-164.4 319.17,-164.4 319.17,-164.4 313.17,-164.4 307.17,-158.4 307.17,-152.4 307.17,-152.4 307.17,-139.6 307.17,-139.6 307.17,-133.6 313.17,-127.6 319.17,-127.6 319.17,-127.6 391.87,-127.6 391.87,-127.6 397.87,-127.6 403.87,-133.6 403.87,-139.6 403.87,-139.6 403.87,-152.4 403.87,-152.4 403.87,-158.4 397.87,-164.4 391.87,-164.4"/>
-<text text-anchor="middle" x="355.52" y="-149.6" font-family="Helvetica,sans-Serif" font-size="12.00">Expert Model 1</text>
-<text text-anchor="middle" x="355.52" y="-135.2" font-family="Helvetica,sans-Serif" font-size="12.00">(XGBoost)</text>
+<title>StackingModel</title>
+<path fill="#c8e6c9" stroke="black" d="M262.21,-363.24C262.21,-363.24 35.79,-363.24 35.79,-363.24 29.79,-363.24 23.79,-357.24 23.79,-351.24 23.79,-351.24 23.79,-268.84 23.79,-268.84 23.79,-262.84 29.79,-256.84 35.79,-256.84 35.79,-256.84 262.21,-256.84 262.21,-256.84 268.21,-256.84 274.21,-262.84 274.21,-268.84 274.21,-268.84 274.21,-351.24 274.21,-351.24 274.21,-357.24 268.21,-363.24 262.21,-363.24"/>
+<polygon fill="#c8e6c9" stroke="none" points="31.79,-260.84 31.79,-359.24 266.21,-359.24 266.21,-260.84 31.79,-260.84"/>
+<polygon fill="none" stroke="black" points="31.79,-338.84 31.79,-359.24 266.21,-359.24 266.21,-338.84 31.79,-338.84"/>
+<text text-anchor="start" x="74.98" y="-346.44" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="12.00">Stacking Ensemble Model</text>
+<polygon fill="none" stroke="black" points="31.79,-260.84 31.79,-338.84 266.21,-338.84 266.21,-260.84 31.79,-260.84"/>
+<text text-anchor="start" x="102.32" y="-325.04" font-family="Helvetica,sans-Serif" font-size="12.00">                            </text>
+<text text-anchor="start" x="34.79" y="-310.64" font-family="Helvetica,sans-Serif" font-size="12.00">                            L1: XGBoost + LightGBM</text>
+<text text-anchor="start" x="34.79" y="-296.24" font-family="Helvetica,sans-Serif" font-size="12.00">                            L2: Logistic Regression</text>
+<text text-anchor="start" x="102.32" y="-281.84" font-family="Helvetica,sans-Serif" font-size="12.00">                            </text>
+<text text-anchor="start" x="108.99" y="-267.44" font-family="Helvetica,sans-Serif" font-size="12.00">                        </text>
 </g>
-<!-- InputData&#45;&gt;XGB -->
+<!-- InputData&#45;&gt;StackingModel -->
 <g id="edge1" class="edge">
-<title>InputData-&gt;XGB</title>
-<path fill="none" stroke="#555555" stroke-dasharray="5,2" d="M223.62,-146C223.62,-146 295.18,-146 295.18,-146"/>
-<polygon fill="#555555" stroke="#555555" points="295.18,-149.5 305.18,-146 295.18,-142.5 295.18,-149.5"/>
-</g>
-<!-- LGB -->
-<g id="node3" class="node">
-<title>LGB</title>
-<path fill="#fff9c4" stroke="black" d="M391.87,-84.4C391.87,-84.4 319.17,-84.4 319.17,-84.4 313.17,-84.4 307.17,-78.4 307.17,-72.4 307.17,-72.4 307.17,-59.6 307.17,-59.6 307.17,-53.6 313.17,-47.6 319.17,-47.6 319.17,-47.6 391.87,-47.6 391.87,-47.6 397.87,-47.6 403.87,-53.6 403.87,-59.6 403.87,-59.6 403.87,-72.4 403.87,-72.4 403.87,-78.4 397.87,-84.4 391.87,-84.4"/>
-<text text-anchor="middle" x="355.52" y="-69.6" font-family="Helvetica,sans-Serif" font-size="12.00">Expert Model 2</text>
-<text text-anchor="middle" x="355.52" y="-55.2" font-family="Helvetica,sans-Serif" font-size="12.00">(LightGBM)</text>
-</g>
-<!-- InputData&#45;&gt;LGB -->
-<g id="edge2" class="edge">
-<title>InputData-&gt;LGB</title>
-<path fill="none" stroke="#555555" stroke-dasharray="5,2" d="M223.62,-66C223.62,-66 295.18,-66 295.18,-66"/>
-<polygon fill="#555555" stroke="#555555" points="295.18,-69.5 305.18,-66 295.18,-62.5 295.18,-69.5"/>
-</g>
-<!-- MetaModel -->
-<g id="node4" class="node">
-<title>MetaModel</title>
-<path fill="#dcedc8" stroke="black" d="M663.81,-126.4C663.81,-126.4 559.1,-126.4 559.1,-126.4 553.1,-126.4 547.1,-120.4 547.1,-114.4 547.1,-114.4 547.1,-101.6 547.1,-101.6 547.1,-95.6 553.1,-89.6 559.1,-89.6 559.1,-89.6 663.81,-89.6 663.81,-89.6 669.81,-89.6 675.81,-95.6 675.81,-101.6 675.81,-101.6 675.81,-114.4 675.81,-114.4 675.81,-120.4 669.81,-126.4 663.81,-126.4"/>
-<text text-anchor="middle" x="611.46" y="-111.6" font-family="Helvetica,sans-Serif" font-size="12.00">Level 2: Final Judge</text>
-<text text-anchor="middle" x="611.46" y="-97.2" font-family="Helvetica,sans-Serif" font-size="12.00">(Logistic Regression)</text>
-</g>
-<!-- XGB&#45;&gt;MetaModel -->
-<g id="edge3" class="edge">
-<title>XGB-&gt;MetaModel</title>
-<path fill="none" stroke="#555555" d="M371.64,-127.46C371.64,-120.45 371.64,-114.13 371.64,-114.13 371.64,-114.13 535.36,-114.13 535.36,-114.13"/>
-<polygon fill="#555555" stroke="#555555" points="535.36,-117.63 545.36,-114.13 535.36,-110.63 535.36,-117.63"/>
-<text text-anchor="middle" x="499.37" y="-144" font-family="Helvetica,sans-Serif" font-size="10.00">  Prediction A</text>
-</g>
-<!-- LGB&#45;&gt;MetaModel -->
-<g id="edge4" class="edge">
-<title>LGB-&gt;MetaModel</title>
-<path fill="none" stroke="#555555" d="M339.4,-84.77C339.4,-93.45 339.4,-101.87 339.4,-101.87 339.4,-101.87 535.13,-101.87 535.13,-101.87"/>
-<polygon fill="#555555" stroke="#555555" points="535.13,-105.37 545.13,-101.87 535.13,-98.37 535.13,-105.37"/>
-<text text-anchor="middle" x="499.37" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00">  Prediction B</text>
+<title>InputData-&gt;StackingModel</title>
+<path fill="none" stroke="#37474f" stroke-width="2" d="M149,-398.98C149,-398.98 149,-374.87 149,-374.87"/>
+<polygon fill="#37474f" stroke="#37474f" stroke-width="2" points="152.5,-376.39 149,-366.39 145.5,-376.39 152.5,-376.39"/>
 </g>
 <!-- Prediction -->
-<g id="node5" class="node">
+<g id="node3" class="node">
 <title>Prediction</title>
-<ellipse fill="#ffcdd2" stroke="black" cx="872.94" cy="-108" rx="92.76" ry="26.02"/>
-<text text-anchor="middle" x="872.94" y="-111.6" font-family="Helvetica,sans-Serif" font-size="12.00">Final Prediction</text>
-<text text-anchor="middle" x="872.94" y="-97.2" font-family="Helvetica,sans-Serif" font-size="12.00">('Fixed' or 'Not Fixed')</text>
+<ellipse fill="#ffccbc" stroke="black" cx="149" cy="-194.82" rx="92.76" ry="26.02"/>
+<text text-anchor="middle" x="149" y="-198.42" font-family="Helvetica,sans-Serif" font-size="12.00">Final Prediction</text>
+<text text-anchor="middle" x="149" y="-184.02" font-family="Helvetica,sans-Serif" font-size="12.00">('Fixed' or 'Not Fixed')</text>
 </g>
-<!-- MetaModel&#45;&gt;Prediction -->
+<!-- StackingModel&#45;&gt;Prediction -->
+<g id="edge2" class="edge">
+<title>StackingModel-&gt;Prediction</title>
+<path fill="none" stroke="#37474f" stroke-width="2" d="M149,-256.48C149,-256.48 149,-232.81 149,-232.81"/>
+<polygon fill="#37474f" stroke="#37474f" stroke-width="2" points="152.5,-234.32 149,-224.32 145.5,-234.32 152.5,-234.32"/>
+</g>
+<!-- Train1 -->
+<g id="node4" class="node">
+<title>Train1</title>
+<path fill="#fff9c4" stroke="black" d="M495.01,-485.24C495.01,-485.24 458.99,-485.24 458.99,-485.24 452.99,-485.24 446.99,-479.24 446.99,-473.24 446.99,-473.24 446.99,-460.44 446.99,-460.44 446.99,-454.44 452.99,-448.44 458.99,-448.44 458.99,-448.44 495.01,-448.44 495.01,-448.44 501.01,-448.44 507.01,-454.44 507.01,-460.44 507.01,-460.44 507.01,-473.24 507.01,-473.24 507.01,-479.24 501.01,-485.24 495.01,-485.24"/>
+<text text-anchor="middle" x="477" y="-470.44" font-family="Helvetica,sans-Serif" font-size="12.00">Train on</text>
+<text text-anchor="middle" x="477" y="-456.04" font-family="Helvetica,sans-Serif" font-size="12.00">Fold 1</text>
+</g>
+<!-- StackingModel&#45;&gt;Train1 -->
+<g id="edge7" class="edge">
+<title>StackingModel-&gt;Train1</title>
+<path fill="none" stroke="#424242" stroke-width="2" stroke-dasharray="5,2" d="M274.68,-345.84C363.57,-345.84 467,-345.84 467,-345.84 467,-345.84 467,-436.69 467,-436.69"/>
+<polygon fill="#424242" stroke="#424242" stroke-width="2" points="463.5,-435.17 467,-445.17 470.5,-435.17 463.5,-435.17"/>
+</g>
+<!-- Validate1 -->
+<g id="node5" class="node">
+<title>Validate1</title>
+<path fill="#cfd8dc" stroke="black" d="M503.02,-328.44C503.02,-328.44 450.98,-328.44 450.98,-328.44 444.98,-328.44 438.98,-322.44 438.98,-316.44 438.98,-316.44 438.98,-303.64 438.98,-303.64 438.98,-297.64 444.98,-291.64 450.98,-291.64 450.98,-291.64 503.02,-291.64 503.02,-291.64 509.02,-291.64 515.02,-297.64 515.02,-303.64 515.02,-303.64 515.02,-316.44 515.02,-316.44 515.02,-322.44 509.02,-328.44 503.02,-328.44"/>
+<text text-anchor="middle" x="477" y="-313.64" font-family="Helvetica,sans-Serif" font-size="12.00">Validate on</text>
+<text text-anchor="middle" x="477" y="-299.24" font-family="Helvetica,sans-Serif" font-size="12.00">Fold 2</text>
+</g>
+<!-- Train1&#45;&gt;Validate1 -->
+<g id="edge3" class="edge">
+<title>Train1-&gt;Validate1</title>
+<path fill="none" stroke="black" d="M487,-448.24C487,-448.24 487,-340.14 487,-340.14"/>
+<polygon fill="black" stroke="black" points="490.5,-340.14 487,-330.14 483.5,-340.14 490.5,-340.14"/>
+</g>
+<!-- Train2 -->
+<g id="node6" class="node">
+<title>Train2</title>
+<path fill="#fff9c4" stroke="black" d="M498.01,-213.22C498.01,-213.22 455.99,-213.22 455.99,-213.22 449.99,-213.22 443.99,-207.22 443.99,-201.22 443.99,-201.22 443.99,-188.42 443.99,-188.42 443.99,-182.42 449.99,-176.42 455.99,-176.42 455.99,-176.42 498.01,-176.42 498.01,-176.42 504.01,-176.42 510.01,-182.42 510.01,-188.42 510.01,-188.42 510.01,-201.22 510.01,-201.22 510.01,-207.22 504.01,-213.22 498.01,-213.22"/>
+<text text-anchor="middle" x="477" y="-198.42" font-family="Helvetica,sans-Serif" font-size="12.00">Train on</text>
+<text text-anchor="middle" x="477" y="-184.02" font-family="Helvetica,sans-Serif" font-size="12.00">Folds 1-2</text>
+</g>
+<!-- Validate1&#45;&gt;Train2 -->
+<g id="edge4" class="edge">
+<title>Validate1-&gt;Train2</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M477,-291.27C477,-291.27 477,-225.1 477,-225.1"/>
+<polygon fill="black" stroke="black" points="480.5,-225.1 477,-215.1 473.5,-225.1 480.5,-225.1"/>
+</g>
+<!-- Validate2 -->
+<g id="node7" class="node">
+<title>Validate2</title>
+<path fill="#cfd8dc" stroke="black" d="M503.02,-132.8C503.02,-132.8 450.98,-132.8 450.98,-132.8 444.98,-132.8 438.98,-126.8 438.98,-120.8 438.98,-120.8 438.98,-108 438.98,-108 438.98,-102 444.98,-96 450.98,-96 450.98,-96 503.02,-96 503.02,-96 509.02,-96 515.02,-102 515.02,-108 515.02,-108 515.02,-120.8 515.02,-120.8 515.02,-126.8 509.02,-132.8 503.02,-132.8"/>
+<text text-anchor="middle" x="477" y="-118" font-family="Helvetica,sans-Serif" font-size="12.00">Validate on</text>
+<text text-anchor="middle" x="477" y="-103.6" font-family="Helvetica,sans-Serif" font-size="12.00">Fold 3</text>
+</g>
+<!-- Train2&#45;&gt;Validate2 -->
 <g id="edge5" class="edge">
-<title>MetaModel-&gt;Prediction</title>
-<path fill="none" stroke="#333333" stroke-width="2" d="M676.09,-108C676.09,-108 768.42,-108 768.42,-108"/>
-<polygon fill="#333333" stroke="#333333" stroke-width="2" points="766.9,-111.5 776.9,-108 766.9,-104.5 766.9,-111.5"/>
-<text text-anchor="middle" x="727.99" y="-111" font-family="Helvetica,sans-Serif" font-size="10.00">  Final Decision</text>
+<title>Train2-&gt;Validate2</title>
+<path fill="none" stroke="black" d="M477,-176.17C477,-176.17 477,-144.74 477,-144.74"/>
+<polygon fill="black" stroke="black" points="480.5,-144.74 477,-134.74 473.5,-144.74 480.5,-144.74"/>
+</g>
+<!-- Dots -->
+<g id="node8" class="node">
+<title>Dots</title>
+<path fill="#cfd8dc" stroke="none" d="M492,-60C492,-60 462,-60 462,-60 456,-60 450,-54 450,-48 450,-48 450,-36 450,-36 450,-30 456,-24 462,-24 462,-24 492,-24 492,-24 498,-24 504,-30 504,-36 504,-36 504,-48 504,-48 504,-54 498,-60 492,-60"/>
+<text text-anchor="middle" x="477" y="-38.4" font-family="Helvetica,sans-Serif" font-size="12.00">...</text>
+</g>
+<!-- Validate2&#45;&gt;Dots -->
+<g id="edge6" class="edge">
+<title>Validate2-&gt;Dots</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M477,-95.76C477,-95.76 477,-71.35 477,-71.35"/>
+<polygon fill="black" stroke="black" points="480.5,-71.35 477,-61.35 473.5,-71.35 480.5,-71.35"/>
 </g>
 </g>
 </svg>
